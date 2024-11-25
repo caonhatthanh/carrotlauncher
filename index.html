@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrot Launcher</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* To set a clean, modern background */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #FFB74D;
+            /* Dark pastel orange for the background */
+            color: #fff;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            overflow: hidden;
+            /* To remove scrollbar */
+            position: relative;
+        }
+
+        /* Header banner style */
+        .header {
+            width: 103%;
+            height: 400px;
+            background-image: url('./img/banner.png');
+            /* Sample banner */
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            border-bottom: 6px solid #FF9F00;
+            animation: fadeInBanner 3s ease-in-out;
+        }
+
+        /* Fade-in animation for the banner */
+        @keyframes fadeInBanner {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* Logo styling */
+        .logo {
+            width: 160px;
+            height: 160px;
+            background-image: url('./img/sv-logo.png');
+            /* Sample logo */
+            background-size: contain;
+            background-repeat: no-repeat;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: fadeInLogo 2s ease-in-out;
+            border-radius: 50%;
+            /* Bo tròn logo */
+        }
+
+        /* Fade-in animation for the logo */
+        @keyframes fadeInLogo {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* Form container for dropdown and button */
+        .form-container {
+            margin-top: 30px;
+            /* Adjusted for light space from banner */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding: 0 20px;
+            animation: fadeInForm 3s ease-in-out;
+        }
+
+        /* Fade-in animation for form */
+        @keyframes fadeInForm {
+            0% {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Custom styled select dropdown */
+        select {
+            padding: 14px 20px;
+            font-size: 18px;
+            color: #333;
+            background-color: #FFFBEC;
+            /* Light pastel yellow */
+            border: 2px solid #FF9F00;
+            border-radius: 8px;
+            margin-right: 20px;
+            appearance: none;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: 0.3s ease;
+            width: 250px;
+            font-weight: bold;
+        }
+
+        /* Remove default dropdown arrow */
+        select::-ms-expand {
+            display: none;
+        }
+
+        /* Button styling */
+        button {
+            padding: 20px 50px;
+            font-size: 22px;
+            background-color: #FF9F00;
+            /* Pastel Orange */
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: #FF7F00;
+            /* Darker orange on hover */
+        }
+
+        /* Stylish container spacing */
+        .form-container select,
+        .form-container button {
+            margin: 8px;
+        }
+
+        /* Particle Effect Styling */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            /* Để không chặn các sự kiện chuột */
+            z-index: 0;
+            /* Đảm bảo particle ở phía sau các phần tử khác */
+            display: block;
+        }
+
+        /* Particle styling */
+        .particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background-color: rgba(200, 200, 200, 0.7);
+            /* Màu xám pastel */
+            border-radius: 50%;
+            animation: particleMove 10s linear infinite;
+        }
+
+        /* Animation for particles to move */
+        @keyframes particleMove {
+            0% {
+                transform: translate(0, 0);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(calc(100vw * 1), calc(100vh * 1));
+                opacity: 0;
+            }
+        }
+
+        /* Slide-in notification style */
+        .notification {
+            position: fixed;
+            top: -100px;
+            /* Initially offscreen */
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #FF9F00;
+            color: white;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            opacity: 0;
+            animation: slideIn 3s forwards;
+        }
+
+        /* Slide-in animation */
+        @keyframes slideIn {
+            0% {
+                top: -100px;
+                opacity: 0;
+            }
+
+            100% {
+                top: 20px;
+                opacity: 1;
+            }
+        }
+
+        .notification i {
+            margin-right: 10px;
+        }
+
+        button i {
+            font-size: 30px;
+            /* Kích thước biểu tượng */
+        }
+
+        /* Các hiệu ứng góc nhẹ nhàng */
+        .corner-effect {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.5);
+            /* Màu trắng mờ */
+            animation: cornerEffectAnimation 4s infinite ease-in-out;
+            z-index: 1;
+        }
+
+        .top-left {
+            top: 10px;
+            left: 10px;
+            animation-delay: 0s;
+        }
+
+        .top-right {
+            top: 10px;
+            right: 10px;
+            animation-delay: 1s;
+        }
+
+        .bottom-left {
+            bottom: 10px;
+            left: 10px;
+            animation-delay: 2s;
+        }
+
+        .bottom-right {
+            bottom: 10px;
+            right: 10px;
+            animation-delay: 3s;
+        }
+
+        /* Hiệu ứng ánh sáng chuyển động nhẹ */
+        @keyframes cornerEffectAnimation {
+            0% {
+                transform: scale(1) translate(0, 0);
+                opacity: 0.5;
+            }
+
+            50% {
+                transform: scale(1.5) translate(10px, 10px);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1) translate(0, 0);
+                opacity: 0.5;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="corner-effect top-left"></div>
+    <div class="corner-effect top-right"></div>
+    <div class="corner-effect bottom-left"></div>
+    <div class="corner-effect bottom-right"></div>
+
+
+    <!-- Particle Effect Layer -->
+    <div class="particles"></div>
+
+    <div class="header">
+        <!-- Banner -->
+    </div>
+
+    <div class="logo"></div>
+
+    <!-- Form container for selecting server and play button -->
+    <div class="form-container">
+        <select id="serverSelect">
+            <option value="fivem://connect/147.185.221.23:60301">Singapore</option>
+            <option value="fivem://connect/26.94.185.97:30120">Radmin</option>
+        </select>
+        <button id="playButton">
+            <i class="fas fa-play"></i> <!-- Biểu tượng Play -->
+        </button>
+
+    </div>
+
+    <!-- Slide-in notification -->
+    <div class="notification">
+        <i class="fas fa-info-circle"></i> Thông Báo: Hãy đóng tất cả Tab FIVEM trước khi ấn Play!!
+    </div>
+
+    <script>
+        const playButton = document.getElementById('playButton');
+        const serverSelect = document.getElementById('serverSelect');
+
+        // Event listener for play button click
+        playButton.addEventListener('click', () => {
+            const selectedServer = serverSelect.value;
+            window.location.href = selectedServer;
+        });
+
+        // Particle creation and animation
+        const particlesContainer = document.querySelector('.particles');
+        const numParticles = 100; // Adjust the number of particles
+
+        for (let i = 0; i < numParticles; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+
+            // Random position on the entire screen
+            particle.style.left = `${Math.random() * 100}vw`; // Sử dụng vw để tạo ra vị trí ngẫu nhiên trong phạm vi màn hình
+            particle.style.top = `${Math.random() * 100}vh`; // Sử dụng vh để tạo ra vị trí ngẫu nhiên trong phạm vi màn hình
+
+            // Random animation duration and delay
+            particle.style.animationDuration = `${Math.random() * 10 + 10}s`; // Để tốc độ particle chậm hơn
+            particle.style.animationDelay = `${Math.random() * 5}s`;
+
+            // Add the particle to the container
+            particlesContainer.appendChild(particle);
+        }
+
+    </script>
+
+</body>
+
+</html>
